@@ -8,6 +8,7 @@ const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.static('public')); //requires the css and js files to automatically upload
 
 function filterByQuery(query, animalsArray) {
     let personalityTraitsArray = [];
@@ -117,14 +118,28 @@ app.get('/api/animals', (req, res) => {
       const animal = createNewAnimal(req.body, animals);
       res.json(animal);
     }
-    
-   
   
+  });
+
+  //'/' brings us to the root route of the server/how to maek a homepage
+  app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/index.html'));
+  });
+  
+  app.get('/animals', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/animals.html'));
+  });
+  
+  app.get('/zookeepers', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/zookeepers.html'));
+  });
+  
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/index.html'));
   });
 
 
 
-  
 //you can put app.listen() at the end but it is not required
 app.listen(PORT, () => {
     console.log(`API server now on port 3001!`);
